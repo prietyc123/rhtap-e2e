@@ -1,0 +1,30 @@
+---
+'4.14':
+  version: "1.0"
+  installer:
+    github: true
+    gitlab: true
+    rhtpa: true
+#Following component test will run#
+  priority:
+  - "High"
+  templates:
+  - dotnet-basic
+  - go
+  - nodejs
+  - python
+  - java-quarkus
+  - java-springboot
+'4.15':
+  version: "1.0"
+  installer:
+    github: true
+    gitlab: true
+    rhtpa: false
+#Following component test will run#
+  priority:
+  - "Medium"
+  templates:
+  - dotnet-basic
+  - go
+  - nodejs

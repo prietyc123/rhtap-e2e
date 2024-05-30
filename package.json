@@ -10,7 +10,9 @@
   },
   "license": "SEE LICENSE IN LICENSE",
   "scripts": {
-    "test": "NODE_NO_WARNINGS=1 JEST_JUNIT_OUTPUT_DIR=${ARTIFACT_DIR-./artifacts} jest --config=jest.config.js"
+    "generate-config": "node generateJestConfigs.js",
+    "run-tests": "node run-test.js",
+    "test": "NODE_NO_WARNINGS=1 JEST_JUNIT_OUTPUT_DIR=${ARTIFACT_DIR-./artifacts} yarn generate-config && yarn run-tests"
   },
   "devDependencies": {
     "@babel/core": "^7.23.7",
