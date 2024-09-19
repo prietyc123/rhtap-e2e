@@ -5,7 +5,7 @@ metadata:
   name: generate-config-pipeline
   namespace: pkumari-tenant
   labels:
-    appstudio.openshift.io/component: rhtap-e2e
+    appstudio.openshift.io/component: rhtap-e2e-test
     appstudio.openshift.io/application: rhtap-nested-ci
 spec:
   workspaces:
