@@ -1,0 +1,23 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: echo-test-pipeline
+  namespace: pkumari-tenant
+  labels:
+    appstudio.openshift.io/component: rhtap-e2e
+    appstudio.openshift.io/application: rhtap-nested-ci
+spec:
+  params:
+    - name: TEST
+      default: 'redhat'
+      type: string
+  tasks:
+    - name: echo-test
+      taskSpec:
+        steps:
+          - name: test
+            image: quay.io/konflux-ci/appstudio-utils:ab6b0b8e40e440158e7288c73aff1cf83a2cc8a9@sha256:24179f0efd06c65d16868c2d7eb82573cce8e43533de6cea14fec3b7446e0b14
+            script: |
+              #!/usr/bin/env bash
+              echo "$(params.TEST)"

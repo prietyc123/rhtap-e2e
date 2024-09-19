@@ -1,0 +1,75 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: generate-config-pipeline
+  namespace: pkumari-tenant
+  labels:
+    appstudio.openshift.io/component: rhtap-e2e
+    appstudio.openshift.io/application: rhtap-nested-ci
+spec:
+  workspaces:
+  - name: git
+  tasks:
+    - name: clone-rhtap-e2e
+      taskRef:
+        name: git-clone
+      workspaces:
+        - name: rhtap-git
+          workspace: git
+          subPath: rhtap-git
+      params:
+        - name: url
+          value: https://github.com/prietyc123/rhtap-e2e.git
+        - name: revision
+          value: handlemultipleconfigautomatically              
+    - name: generate-config-pipeline
+      runAfter:
+        - "clone-rhtap-e2e"
+      workspaces:
+        - name: rhtap-git
+          workspace: git
+          subPath: rhtap-git
+      taskSpec:
+        steps:
+          - name: generate-config
+            image: quay.io/openshift-pipeline/ci
+            workingDir: $(workspaces.rhtap-git.path)
+            script: |
+              #!/usr/bin/env bash             
+              yarn generate-config
+    - name: echo-generated-filename
+      runAfter:
+        - "generate-config-pipeline"
+      workspaces:
+        - name: rhtap-git
+          workspace: git
+          subPath: rhtap-git
+      taskSpec:
+        steps:
+          - name: echo-config-files
+            image: quay.io/openshift-pipeline/ci
+            workingDir: $(workspaces.rhtap-git.path)
+            script: |
+              #!/usr/bin/env bash
+
+              configDir="generated-config"
+              # Initialize an empty file array
+              files=()
+
+              for file in "$configDir"/*; do
+                files+=("$(basename "$file")")
+              done
+              
+              # Start the created pipeline with multiple configfile
+              for filename in "${files[@]}"
+              do
+                configFile="$configDir/$filename"
+
+                # Use node to read the file and extract the 'ocp' value
+                ocp_version=$(node -e "
+                  const config = require('$configFile');
+                  console.log(config.globals.suites.softwareTemplates.pipeline.ocp);
+                ")
+                tkn pipeline start -f https://raw.githubusercontent.com/prietyc123/rhtap-e2e/handlemultipleconfigautomatically/integration-tests/pipelines/echo-test-pipeline.yaml --param TEST="$ocp_version"
+              done

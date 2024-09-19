@@ -1,9 +1,12 @@
 const fs = require('fs');
 const yaml = require('yaml');
 
-// Read and parse the YAML config file
+// parse the YAML config file
 const configFile = fs.readFileSync('common-config.yaml', 'utf8');
 const config = yaml.parse(configFile);
+const path = require('path');
+// path where the file should be created
+const configDir = path.join(process.cwd(), "generated-config");
 
 // Default configuration that is common across all generated files
 const defaultConfig = {
@@ -19,6 +22,8 @@ const defaultConfig = {
         priority: "",
         github: {
           active: "",
+          tekton: true,
+          jenkins: false,
           host: 'https://api.github.com',
           registriesConfig: {
             quay: {
@@ -29,6 +34,8 @@ const defaultConfig = {
         },
         gitlab: {
           active: "",
+          tekton: true,
+          jenkins: false,
           host: 'https://gitlab.com',
           registriesConfig: {
             quay: {
@@ -96,7 +103,13 @@ Object.keys(config).forEach(version => {
 
   // Convert the config object to a JS module export format
   const configContent = `module.exports = ${JSON.stringify(generatedConfig, null, 2)};`;
-  const configFileName = `jest.config.${version}.js`;
+  // const configFileName = path.join("$(pwd)/tests", `jest.config.${version}.js`);
+  const configFileName = path.join(configDir, `jest.config.${version}.js`);
+
+  // Ensure the directory exists
+  if (!fs.existsSync(configDir)) {
+    fs.mkdirSync(configDir, { recursive: true });
+  }
 
   // Check if the file exists and write the new config content, replacing if necessary
   if (fs.existsSync(configFileName)) {
