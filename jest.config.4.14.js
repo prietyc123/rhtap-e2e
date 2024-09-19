@@ -20,6 +20,8 @@ module.exports = {
         ],
         "github": {
           "active": true,
+          "tekton": true,
+          "jenkins": false,
           "host": "https://api.github.com",
           "registriesConfig": {
             "quay": {
@@ -30,6 +32,8 @@ module.exports = {
         },
         "gitlab": {
           "active": true,
+          "tekton": true,
+          "jenkins": false,
           "host": "https://gitlab.com",
           "registriesConfig": {
             "quay": {
