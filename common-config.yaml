@@ -1,6 +1,6 @@
 ---
 '4.14':
-  version: "1.0"
+  version: "1.2"
   installer:
     github: true
     gitlab: true
@@ -16,7 +16,7 @@
   - java-quarkus
   - java-springboot
 '4.15':
-  version: "1.0"
+  version: "1.2"
   installer:
     github: true
     gitlab: true
