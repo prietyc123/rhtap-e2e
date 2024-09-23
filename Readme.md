@@ -1,5 +1,5 @@
 # Red Hat Trsuted Application Pipeline Tests
-test
+test123
 
 > [!WARNING]  
 > This tests are in very beta state yet. Before running them you need to perform some steps
