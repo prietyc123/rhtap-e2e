@@ -3,10 +3,10 @@ apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
   name: echo-test-pipeline
-  namespace: pkumari-tenant
-  labels:
-    appstudio.openshift.io/component: rhtap-e2e-test
-    appstudio.openshift.io/application: rhtap-nested-ci
+  namespace: default
+  # labels:
+  #   appstudio.openshift.io/component: rhtap-e2e-test
+  #   appstudio.openshift.io/application: rhtap-nested-ci
 spec:
   params:
     - name: TEST
